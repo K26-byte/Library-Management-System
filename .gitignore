@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+library_data.json
+.library-*.tmp
+.venv/
+.idea/
+.vscode/
