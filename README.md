@@ -1,23 +1,23 @@
 # Library Management System
 
-A library system you run from the command line, written in Python. I built it as the final project for my data structures and algorithms course. The brief was only "build a library management system", so I decided the data structures should be the whole point. Every feature runs on a structure chosen for that job, and the main ones are written by hand instead of borrowed from Python.
+A library system you run from the command line(GUI is difficult [ T—T ] ), written in Python. I built it as the final project for my data structures and algorithms course. The brief was only "build a library management system", so I decided the data structures should be the whole point. Every feature runs on a structure chosen for that job, and the main ones are written by hand instead of borrowed from Python.
 
 ## What it does
 
-You can add, remove and search books, lend them out, take them back, and keep track of who owes what. A few things I'm happiest with:
+You can add, remove and search books, lend them out, take them back, and keep track of who owes what. A few things I'm semi-happy with:
 
-- **Search as you'd actually type it.** Any word or the start of a word in the title or author works, so `alg` finds *Introduction to Algorithms*. Accents don't matter either: `miserables` finds *Les Misérables*.
+- **Search as you'd actually type it.** Any word or the start of a word in the title or author works, so `alg` finds *Introduction to Algorithms*. Accents don't matter either: `miserables` finds *Les Misérables*, honestly the book is a bit over hyped by it's fans.
 - **A waitlist.** If a book is out, you can join the queue. When it comes back, it goes to the next person in line automatically.
 - **Fines and renewals.** Late books cost Rs 2 a day, added to the member's account. Anyone with unpaid fines or an overdue book can't borrow more until they sort it out.
-- **Undo.** Made a mistake? Undo reverses the last action exactly, including a return that handed the book to someone on the waitlist.
-- **Recommendations.** "Members who borrowed this also borrowed..."
-- **It remembers.** Everything is saved to a file, so closing the program doesn't lose anything.
+- **Undo.** It's rather obvious...
+- **Recommendations.** "Members who borrowed this also borrowed...". No I am not stealing your personal details for this.
+- **It remembers.** The title makes it sound dramatic. Everything is saved to a file, so closing the program doesn't lose anything. 
 
 The default rules are a 14-day loan, 3 books per member at a time, and 2 renewals. They're constants at the top of the `Library` class if you want to change them.
 
 ## Running it
 
-You need Python 3.8 or newer. There is nothing to install. I developed it on Python 3.12.
+You need Python 3.8 or newer. There is nothing to install. I developed it on Python 3.15.
 
 ```
 python main.py --demo      # the interactive menu, with sample books and members to play with
@@ -55,21 +55,21 @@ The hand-written ones are all in `library/structures.py`, and the rules that tie
 
 **The waitlist isn't a plain queue.** With a normal queue you can't pull someone out of the middle quickly, and you can't ask "is this person already waiting?" without scanning the whole thing. So each queue is a doubly linked list with a hash map pointing at every node. Joining, serving and cancelling are all O(1). It also lets undo put someone back in exactly the spot they left.
 
-**The overdue heap never deletes anything from the middle.** Removing an item from the middle of a heap is awkward. So when a loan is returned or renewed, I leave its old entry in the heap and just ignore it when it eventually reaches the top, by checking it against the real loan record. It's called lazy deletion. A renewal costs one push, and checking for overdue books only touches the loans that are actually overdue instead of looking at all of them.
+**The overdue heap never deletes anything from the middle.** Removing an item from the middle of a heap is awkward. So when a loan is returned or renewed, I leave its old entry in the heap and just ignore it when it eventually reaches the top, by checking it against the real loan record. Lazy deletion. A renewal costs one push, and checking for overdue books only touches the loans that are actually overdue instead of looking at all of them.
 
-**Undo is a stack of "how to reverse this" functions.** Each action saves the exact steps to undo itself at the moment it happens, so there's no giant if/else deciding what to do later. The one exception is changes to the catalog (adding copies, removing a title). Those aren't undoable, and they clear the undo history for that title, because the old entries wouldn't make sense any more.
+**Undo is a stack of "how to reverse this" functions.** Each action saves the exact steps to undo itself at the moment it happens, so there's no giant if/else deciding what to do later. The one exception is changes to the catalog (adding copies, removing a title). Those aren't undoable, and they clear the undo history for that title, because the old entries wouldn't make sense any more(at least that's how I did that, there might be better ways to implement this function).
 
 **Recommendations count people, not borrowings.** A link between two books is only added the first time a member borrows each one. Otherwise one person re-borrowing the same two books five times would look like five people.
 
-**My merge sort is slower than Python's `sorted()`.** That's expected, since the built-in one is written in C. `benchmark.py` shows this honestly. I kept my own because it's stable (equal items stay in their original order), which is how "sort by year, ties broken by title" works, and because I can explain every line of it.
+**My merge sort is slower than Python's `sorted()`.** That's expected(it is to me), since the built-in one is written in C. `benchmark.py` shows this honestly. I kept my own because it's stable (equal items stay in their original order), which is how "sort by year, ties broken by title" works, and because I can explain every line of it(somewhat...).
 
-## How I tested it
+## How I tested it (Yeah I didn't just let it free into GitHub immediately after creating it)
 
 There are 76 tests. Most check one rule each, and I wrote a test for every bug I found along the way. The most useful ones are randomised: they run around 15,000 random actions and, after every single step, check that all the structures still agree with each other and that undo puts everything back exactly as it was. Failed actions are also checked to make sure they change nothing.
 
 `benchmark.py` backs up the complexity claims with real timings. In my runs, looking up a word prefix with the Trie was hundreds to thousands of times faster than scanning every book, and the gap grew as the library got bigger.
 
-## What it doesn't do
+## What it doesn't do (As awesome as I am, I unfortunately cannot do everything.)
 
 - It's for one person at a time. If two copies of the program edit the same data file, the last one to save wins.
 - Members can't be deleted, and there are no passwords.
@@ -93,6 +93,6 @@ library/
 tests/             the test suite
 ```
 
-## What I'd add next
+## What I'd add next (Being very optimistic here)
 
 A graphical front end (Tkinter or a small Flask site), a tree for searching by year range, typo-tolerant search, and due-date reminders.
