@@ -95,4 +95,8 @@ tests/             the test suite
 
 ## What I'd add next (Being very optimistic here)
 
-A graphical front end (Tkinter or a small Flask site), a tree for searching by year range, typo-tolerant search, and due-date reminders.
+A tree for searching by year range, typo-tolerant search, and due-date reminders.
+
+## Added the GUI (Calm down it's just Tkinter)
+
+Simple stuff. I added it cause I had enough time to design some very basic stuff.
