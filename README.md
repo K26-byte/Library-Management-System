@@ -1,6 +1,6 @@
 # Library Management System
 
-A library system you run from the command line(GUI is difficult [ T—T ] ), written in Python. I built it as the final project for my data structures and algorithms course. The brief was only "build a library management system", so I decided the data structures should be the whole point. Every feature runs on a structure chosen for that job, and the main ones are written by hand instead of borrowed from Python.
+A library system(Finally did GUI part too), written in Python. I built it as the minor project for my data structures and algorithms course. The brief was only "build a library management system", so I decided the data structures should be the whole point. Every feature runs on a structure chosen for that job, and the main ones are written by hand instead of borrowed from Python.
 
 ## What it does
 
@@ -99,4 +99,8 @@ A tree for searching by year range, typo-tolerant search, and due-date reminders
 
 ## Added the GUI (Calm down it's just Tkinter)
 
-Simple stuff. I added it cause I had enough time to design some very basic stuff.
+Simple stuff. I added it cause I had enough time to design some very basic stuff. Just use terminal to run the file, for windows the code goes
+
+``` Terminal
+python gui.py --demo
+```
